@@ -10,8 +10,8 @@ class ImageController {
 
   // Creates a client
   const client = new vision.ImageAnnotatorClient({
-    projectId: process.env.PROJECT_ID2,
-    keyFilename: process.env.KEYFILE_PATH2
+    projectId: process.env.PROJECT_ID,
+    keyFilename: process.env.KEYFILE_PATH
   });
 
 /**
@@ -22,18 +22,33 @@ class ImageController {
 
 // Performs label detection on the gcs file
   client
-    .logoDetection(`gs://${process.env.BUCKET_NAME2}/images/${req.file.cloudStorageObject}`)
+    .labelDetection(`gs://${process.env.BUCKET_NAME}/images/${req.file.cloudStorageObject}`)
     .then(results => {
       console.log(results);
-      const logos = results[0].logoAnnotations;
+      const labels = results[0].labelAnnotations;
       // console.log(req.file.cloudStoragePublicUrl, 'req file nih');
       // labels.forEach(label => console.log(label.description));
-      res.status(200).json({
-        logos : logos[0].description
+      Location.findLocation()
+      .then(resp => {
+        Zomato.search(resp.lattitude, resp.longitude, labels[0].description)
+        .then(result => {
+          res.status(200).json({
+            data: result.data
+          })
+        })
+        .catch(err => {
+          res.send(err)
+        })
+      })
+      .catch(err => {
+        res.send(err)
+      })
+      // res.status(200).json({
+      //   labels : labels[0].description
         // message : 'get url image and food name',
         // foodName : labels[0].description,
         // foodImage: req.file.cloudStoragePublicUrl
-      })
+      // })
     })
     .catch(err => {
       console.error('ERROR:', err);
