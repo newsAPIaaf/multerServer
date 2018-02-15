@@ -9,17 +9,18 @@ var index = require('./routes/index');
 var users = require('./routes/users');
 var images = require('./routes/image')
 var walmart = require('./routes/walmart')
+const mongoose = require('mongoose');
+require('dotenv').config()
 
+mongoose.connect(`mongodb://${process.env.DB_USER}:${process.env.DB_PASS}@ds113680.mlab.com:13680/findingresto`); //connect to database
 
-var app = express();
+const index = require('./routes/index');
+const users = require('./routes/users');
+const images = require('./routes/image');
 
-// view engine setup
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'jade');
-
+const app = express();
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
-app.use(cors())
 app.use(logger('dev'));
 app.use(cors())
 app.use(bodyParser.json());
@@ -46,8 +47,9 @@ app.use(function(err, req, res, next) {
   res.locals.error = req.app.get('env') === 'development' ? err : {};
 
   // render the error page
+  console.log(err)
   res.status(err.status || 500);
-  res.render('error');
+  res.send(err);
 });
 
 module.exports = app;
