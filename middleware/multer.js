@@ -2,14 +2,14 @@ require('dotenv').config()
 const Storage = require('@google-cloud/storage')
 
 const storage = Storage({
-  projectId: process.env.PROJECT_ID,
-  keyFilename: process.env.KEYFILE_PATH
+  projectId: process.env.PROJECT_ID2,
+  keyFilename: process.env.KEYFILE_PATH2
 })
 
-const bucket = storage.bucket(process.env.BUCKET_NAME)
+const bucket = storage.bucket(process.env.BUCKET_NAME2)
 
 const getPublicUrl = (filename) => {
-  return `https://storage.googleapis.com/${process.env.BUCKET_NAME}/images/${filename}`
+  return `https://storage.googleapis.com/${process.env.BUCKET_NAME2}/images/${filename}`
 }
 
 const sendUploadToGCS = (req, res, next) => {
