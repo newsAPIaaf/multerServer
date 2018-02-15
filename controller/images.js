@@ -33,7 +33,8 @@ class ImageController {
         Zomato.search(resp.lattitude, resp.longitude, labels[0].description)
         .then(result => {
           res.status(200).json({
-            data: result.data
+            data: result.data,
+            foodName: labels[0].description
           })
         })
         .catch(err => {
@@ -58,7 +59,7 @@ class ImageController {
       })
     });
   }
-  
+
   static restaurantLocator (req, res, labelFromGVision) {
     Location.findLocation()
     .then(resp => {
