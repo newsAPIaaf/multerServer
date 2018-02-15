@@ -27,14 +27,17 @@ class ImageController {
       console.log(results);
       const labels = results[0].labelAnnotations;
       // console.log(req.file.cloudStoragePublicUrl, 'req file nih');
-      // labels.forEach(label => console.log(label.description));
+      // let arr = []
+      // console.log(labels, 'tes');
+      // labels.forEach(label => arr.push(label.description));
+
       Location.findLocation()
       .then(resp => {
-        Zomato.search(resp.lattitude, resp.longitude, labels[0].description)
+        Zomato.search(resp.data.latitude, resp.data.longitude, labels[2].description)
         .then(result => {
           res.status(200).json({
             data: result.data,
-            foodName: labels[0].description
+            foodName: labels[2].description
           })
         })
         .catch(err => {
@@ -60,27 +63,27 @@ class ImageController {
     });
   }
 
-  static restaurantLocator (req, res, labelFromGVision) {
-    Location.findLocation()
-    .then(resp => {
-      // console.log(resp);
-      Zomato.search(resp.lattitude, resp.longitude, labelFromGVision)
-      .then(result => {
-        res.status(200).json({
-          msg: 'nearby restaurants with chicken:',
-          data: result.data
-        })
-      })
-      .catch(err => {
-        res.status(500).json({
-          err: err
-        })
-      })
-    })
-    .catch(err => {
-      console.log(err);
-    })
-  }
+  // static restaurantLocator (req, res, labelFromGVision) {
+  //   Location.findLocation()
+  //   .then(resp => {
+  //     // console.log(resp);
+  //     Zomato.search(resp.latitude, resp.longitude, labelFromGVision)
+  //     .then(result => {
+  //       res.status(200).json({
+  //         msg: 'nearby restaurants with chicken:',
+  //         data: result.data
+  //       })
+  //     })
+  //     .catch(err => {
+  //       res.status(500).json({
+  //         err: err
+  //       })
+  //     })
+  //   })
+  //   .catch(err => {
+  //     console.log(err);
+  //   })
+  // }
 }
 
 module.exports = ImageController;
