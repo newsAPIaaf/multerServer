@@ -45,14 +45,14 @@ class ImageController {
 
 // Performs label detection on the gcs file
   client
-    .logoDetection(`gs://${process.env.BUCKET_NAME}/images/${req.file.cloudStorageObject}`)
+    .labelDetection(`gs://${process.env.BUCKET_NAME}/images/${req.file.cloudStorageObject}`)
     .then(results => {
-      const logos = results[0].logoAnnotations;
+      const labels = results[0].labelAnnotations;
       // console.log(req.file.cloudStoragePublicUrl, 'req file nih');
       // labels.forEach(label => console.log(label.description));
       res.status(200).json({
-        logos : logos[0].description
-        // message : 'get url image and food name',
+        message : 'get url image and food name',
+        foodName : labels[0].description
         // foodName : labels[0].description,
         // foodImage: req.file.cloudStoragePublicUrl
       })
